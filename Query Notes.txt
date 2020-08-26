@@ -1,0 +1,36 @@
+------------------------------------------------------------------------
+# Select all games in order by date with the given month, year, map, and # of players
+
+select g.game_id, g.date, g.map, g.team_rounds, g.enemy_rounds
+	from games g
+where 
+	g.map = $1 and
+
+	date_part('year', g.date) = $2 and
+	date_part('month', g.date) = $3 and
+
+	g.game_id IN
+		(
+			select igs.game_id 
+				from game_stats igs 
+			WHERE absence = 0 
+				GROUP BY igs.game_id
+				HAVING count(*) 
+		)
+
+order by g.date desc
+------------------------------------------------------------------------
+	
+
+
+
+
+
+
+
+
+
+
+
+
+

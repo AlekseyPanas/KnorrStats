@@ -3,7 +3,7 @@ from PIL import Image, ImageFilter
 from enum import Enum
 pygame.init()
 
-SCREEN_SIZE = (900, 900)
+SCREEN_SIZE = (700, 700)
 
 
 class Colors(Enum):
@@ -12,12 +12,13 @@ class Colors(Enum):
 
 
 def convert():
-    global bg_image, tab_image, delete_button_image, edit_button_image, new_button_image
+    global bg_image, tab_image, delete_button_image, edit_button_image, new_button_image, sword_loading_image
     bg_image = bg_image.convert_alpha()
     tab_image = tab_image.convert_alpha()
     edit_button_image = edit_button_image.convert_alpha()
     delete_button_image = delete_button_image.convert_alpha()
     new_button_image = new_button_image.convert_alpha()
+    sword_loading_image = sword_loading_image.convert_alpha()
 
 
 # Scales a set of coordinates to the current screen size based on a divisor factor
@@ -79,6 +80,8 @@ edit_button_image = pygame.image.load("assets/images/edit_button.png")
 new_button_image = pygame.image.load("assets/images/new_button.png")
 add_button_image = pygame.image.load("assets/images/add_button.png")
 subtract_button_image = pygame.image.load("assets/images/subtract_button.png")
+
+sword_loading_image = pygame.transform.scale(pygame.image.load("assets/images/knorr_sword.png"), cscale(200, 100))
 
 
 def get_rockwell_font(size):

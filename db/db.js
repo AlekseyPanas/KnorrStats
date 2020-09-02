@@ -8,18 +8,24 @@ const pool = new Pool({
     port: 5432,
 });
 
-/* IGNORE CODE BELOW ITS AN EXAMPLE
-const getArticle = async (url) => (await pool.query("SELECT title, created_on, body, thumbnail_url, thumbnail_caption FROM article WHERE is_published AND seo_url = $1 LIMIT 1;",
-    [url])).rows.map(row => {
-        return {
-            title: row.title,
-            date: row.created_on,
-            thumbnailUrl: row.thumbnail_url,
-            body: row.body,
-            caption: row.thumbnail_caption
-        };
-    });*/
+// Gets data from player table necessary for client functionality
+const getClientPlayerData = async () => {
+    // Saves rows of query
+    let data = (await pool.query("SELECT player_id, name, ismainroster FROM player")).rows;
+    // Appends each row as an object into a list
+    let new_rows = [];
+    data.forEach((item) => {
+        new_rows.push({
+            player_id: item.player_id,
+            player_name: item.name,
+            is_main_roster: item.ismainroster
+        });
+    }); 
+    
+    return new_rows;
+};
 
 module.exports = {
     query: (text, params) => pool.query(text, params),
+    getClientPLayerData: () => getClientPlayerData()
 };

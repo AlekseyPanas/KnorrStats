@@ -12,7 +12,7 @@ class Button:
         self.size = size
         self.image = None
         if image is not None:
-            self.image = pygame.transform.scale(image, (size[0], size[1] * 2))
+            self.image = pygame.transform.smoothscale(image, (size[0], size[1] * 2))
 
         # Image contains 2 states of the button. These 2 surfaces will hold each state.
         self.static = pygame.Surface(self.size, pygame.SRCALPHA, 32)
@@ -40,14 +40,10 @@ class Button:
         self.button_state = "static"
 
     def draw(self, screen):
-        if self.button_state == "pressed":
-            screen.blit(self.pressed, self.top_left)
-        else:
-            screen.blit(self.hover if self.button_state == "hover" else self.static, self.top_left)
+        screen.blit(self.hover if self.button_state == "hover" else self.static, self.top_left)
 
     def is_hover(self, pos):
-        if not self.button_state == "pressed":
-            self.button_state = "hover" if pygame.Rect(self.top_left, self.size).collidepoint(pos) else "static"
+        self.button_state = "hover" if pygame.Rect(self.top_left, self.size).collidepoint(pos) else "static"
 
     def is_clicked(self, pos):
         return pygame.Rect(self.top_left, self.size).collidepoint(pos)

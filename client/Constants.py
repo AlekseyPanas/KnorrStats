@@ -9,16 +9,26 @@ SCREEN_SIZE = (700, 700)
 class Colors(Enum):
     BLACK = (0, 0, 0)
     GRAY = (50, 50, 50)
+    LIGHT_BLUE = (173, 216, 230)
+    MAROON = (120, 0, 0)
+    DARK_GREEN = (0, 102, 0)
 
 
 def convert():
-    global bg_image, tab_image, delete_button_image, edit_button_image, new_button_image, sword_loading_image
+    global bg_image, tab_image, delete_button_image, edit_button_image, new_button_image, sword_loading_image, \
+           retry_button_image, typefield_image, back_button_image, arrow_button_image, yes_image, no_image
     bg_image = bg_image.convert_alpha()
     tab_image = tab_image.convert_alpha()
     edit_button_image = edit_button_image.convert_alpha()
     delete_button_image = delete_button_image.convert_alpha()
     new_button_image = new_button_image.convert_alpha()
     sword_loading_image = sword_loading_image.convert_alpha()
+    retry_button_image = retry_button_image.convert_alpha()
+    typefield_image = typefield_image.convert_alpha()
+    back_button_image = back_button_image.convert_alpha()
+    arrow_button_image = arrow_button_image.convert_alpha()
+    yes_image = yes_image.convert_alpha()
+    no_image = no_image.convert_alpha()
 
 
 # Scales a set of coordinates to the current screen size based on a divisor factor
@@ -72,17 +82,36 @@ def create_shadow(color, surf=None, rect=False, rectsize=None, blurmargin=(50, 5
     return surface
 
 
-bg_image = pygame.transform.scale(pygame.image.load("assets/images/bg.png"), cscale(900, 900))
-tab_image = pygame.transform.scale(pygame.image.load("assets/images/game_tab.png"), cscale(832, 63))
+# Searches raw player json to find the object matching the ID
+def getPlayerFromJson(id, raw_data):
+    for player in raw_data:
+        if player["player_id"] == id:
+            return player
+    return None
+
+
+bg_image = pygame.transform.smoothscale(pygame.image.load("assets/images/bg.png"), cscale(900, 900))
+tab_image = pygame.transform.smoothscale(pygame.image.load("assets/images/game_tab.png"), cscale(832, 63))
+typefield_image = pygame.image.load("assets/images/typefield.png")
 
 delete_button_image = pygame.image.load("assets/images/delete_button.png")
 edit_button_image = pygame.image.load("assets/images/edit_button.png")
 new_button_image = pygame.image.load("assets/images/new_button.png")
 add_button_image = pygame.image.load("assets/images/add_button.png")
 subtract_button_image = pygame.image.load("assets/images/subtract_button.png")
+retry_button_image = pygame.image.load("assets/images/retry_button.png")
+back_button_image = pygame.image.load("assets/images/backbutton.png")
+arrow_button_image = pygame.image.load("assets/images/arrowbutton.png")
 
-sword_loading_image = pygame.transform.scale(pygame.image.load("assets/images/knorr_sword.png"), cscale(200, 100))
+sword_loading_image = pygame.transform.smoothscale(pygame.image.load("assets/images/knorr_sword.png"), cscale(200, 100))
+
+no_image = pygame.image.load("assets/images/no.png")
+yes_image = pygame.image.load("assets/images/yes.png")
 
 
 def get_rockwell_font(size):
     return pygame.font.Font("assets/fonts/ROCCB.ttf", size)
+
+
+def get_code_font(size):
+    return pygame.font.Font("assets/fonts/jd_code.ttf", size)

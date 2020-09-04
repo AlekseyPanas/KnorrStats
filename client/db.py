@@ -1,6 +1,7 @@
 import requests as req
 import Globe
 import time
+import Game
 
 
 class ServerComms:
@@ -14,7 +15,13 @@ class ServerComms:
 
     def setPlayerData(self):
         # Delay for debugging
-        time.sleep(20)
+        time.sleep(2)
 
         # Sets raw player json to data from server
         Globe.APP.raw_player_json = req.get(self.domain_addr + "/ajax/getplayers").json()
+
+        # As an additional function, loads map data from database
+        Globe.APP.raw_map_json = req.get(self.domain_addr + "/ajax/getmaps").json()
+
+        # Creates Daily Game Data objects for each player
+        Globe.APP.daily_player_data = [Game.PlayerDailyData(player["player_id"]) for player in Globe.APP.raw_player_json]

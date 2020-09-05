@@ -2,6 +2,11 @@ import requests as req
 import Globe
 import time
 import Game
+import Constants as c
+
+
+class DataMissing(Exception):
+    pass
 
 
 class ServerComms:
@@ -25,3 +30,15 @@ class ServerComms:
 
         # Creates Daily Game Data objects for each player
         Globe.APP.daily_player_data = [Game.PlayerDailyData(player["player_id"]) for player in Globe.APP.raw_player_json]
+
+    def submitData(self):
+        self.buildJSON()
+
+        Globe.APP.rendered_message = c.get_code_font(c.cscale(50)).render("Uploading Data...", False,
+                                                                     c.Colors.BLACK.value)
+
+        time.sleep(2)
+
+    def buildJSON(self):
+        time.sleep(2)
+        # raise DataMissing

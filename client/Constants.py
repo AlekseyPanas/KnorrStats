@@ -20,7 +20,8 @@ class Colors(Enum):
 
 def convert():
     global bg_image, tab_image, delete_button_image, edit_button_image, new_button_image, sword_loading_image, \
-           retry_button_image, typefield_image, back_button_image, arrow_button_image, yes_image, no_image
+           retry_button_image, typefield_image, back_button_image, arrow_button_image, yes_image, no_image, \
+           submit_button_image, okay_button_image
     bg_image = bg_image.convert_alpha()
     tab_image = tab_image.convert_alpha()
     edit_button_image = edit_button_image.convert_alpha()
@@ -33,6 +34,8 @@ def convert():
     arrow_button_image = arrow_button_image.convert_alpha()
     yes_image = yes_image.convert_alpha()
     no_image = no_image.convert_alpha()
+    submit_button_image = submit_button_image.convert_alpha()
+    okay_button_image = okay_button_image.convert_alpha()
 
 
 # Scales a set of coordinates to the current screen size based on a divisor factor
@@ -106,6 +109,8 @@ subtract_button_image = pygame.image.load("assets/images/subtract_button.png")
 retry_button_image = pygame.image.load("assets/images/retry_button.png")
 back_button_image = pygame.image.load("assets/images/backbutton.png")
 arrow_button_image = pygame.image.load("assets/images/arrowbutton.png")
+submit_button_image = pygame.image.load("assets/images/submit_button.png")
+okay_button_image = pygame.image.load("assets/images/okay_button.png")
 
 sword_loading_image = pygame.transform.smoothscale(pygame.image.load("assets/images/knorr_sword.png"), cscale(200, 100))
 

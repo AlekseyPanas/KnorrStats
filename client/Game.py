@@ -9,8 +9,7 @@ import copy
 
 # Data storage class for each game played
 class GameData:
-    def __init__(self, player_json):
-        # TODO: Add Map Name and score display on game tab in main menu
+    def __init__(self):
         # GUI
         self.edit_button = Button.Button(list(c.cscale(570, 0)), c.cscale(128, 33), c.edit_button_image)
         self.delete_button = Button.Button(list(c.cscale(720, 0)), c.cscale(128, 33), c.delete_button_image)

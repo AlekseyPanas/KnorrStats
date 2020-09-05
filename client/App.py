@@ -9,6 +9,7 @@ import math
 import requests
 import Button
 import Game
+import db
 
 
 class App:
@@ -16,6 +17,7 @@ class App:
     class State(IntEnum):
         MAIN = 0
         EDIT = 1
+        RELOAD = 2
 
     def __init__(self):
         # State Machine bois
@@ -35,6 +37,8 @@ class App:
         # Various static texts that will need to be displayed on screen
         self.txt1 = c.get_rockwell_font(c.cscale(45)).render("Date:", True, c.Colors.BLACK.value)
         self.txt2 = c.get_rockwell_font(c.cscale(40)).render("New", True, c.Colors.DARK_GREEN.value)
+        self.txt3 = c.get_code_font(c.cscale(50)).render("Data Successfully Uploaded", False,
+                                                                             c.Colors.DARK_GREEN.value)
 
         # Player names, ids, and main roster info retrieved from database
         self.raw_player_json = None
@@ -46,12 +50,18 @@ class App:
         self.add_date_button = Button.Button(c.cscale(400, 13), c.cscale(30, 30), c.add_button_image)
         self.sub_date_button = Button.Button(c.cscale(400, 56), c.cscale(30, 30), c.subtract_button_image)
         self.new_game_button = Button.Button(c.cscale(835, 28), c.cscale(40, 40), c.new_button_image)
+        self.submit_button = Button.Button(c.cscale(750, 840), c.cscale(128, 40), c.submit_button_image)
+
+        # >>> Reload state okay button
+        self.okay_button = Button.Button(c.cscale(375, 445), c.cscale(150, 48), c.okay_button_image)
 
         """Stuff Related to loading"""
         # Flag which halts all states and runs loading screen
         self.loading = False
 
         self.retry_button = Button.Button(c.cscale(375, 445), c.cscale(150, 48), c.retry_button_image)
+        # Used in place of retry button to return to main screen if json data failed due to missing info
+        self.back_button = Button.Button(c.cscale(375, 445), c.cscale(150, 48), c.back_button_image)
 
         # Function to run on thread followed by the thread object
         self.thread_target = lambda x: x
@@ -60,6 +70,8 @@ class App:
         self.rendered_message = None
         # If the thread_target throws an error in the other thread this variable will be populated
         self.error = None
+        # Determines if back button is to be used instead of retry button
+        self.is_json_error = False
 
         # Starts loading screen for player data
         self.loading = True
@@ -85,8 +97,33 @@ class App:
                 self.run_main_state(screen)
             elif self.state == App.State.EDIT:
                 self.run_edit_state(screen)
+            elif self.state == App.State.RELOAD:
+                self.run_reload_state(screen)
 
     """>>> App States:"""
+    def run_reload_state(self, screen):
+        screen.fill(c.Colors.LIGHT_BLUE.value)
+
+        # Blits success message
+        screen.blit(self.txt3, self.txt3.get_rect(center=c.cscale(450, 550)))
+
+        # Runs button
+        self.okay_button.draw(screen)
+        self.okay_button.is_hover(pygame.mouse.get_pos())
+
+        for event in Globe.events:
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    if self.okay_button.is_clicked(event.pos):
+                        # Reloads players
+                        self.loading = True
+                        self.rendered_message = c.get_code_font(c.cscale(50)).render("Retrieving Players...", False,
+                                                                                     c.Colors.BLACK.value)
+                        self.thread_target = Globe.SERV.setPlayerData
+                        self.load_thread.start()
+                        # Resets State
+                        self.state = App.State.MAIN
+
     def run_main_state(self, screen):
         # Draws background
         screen.blit(c.bg_image, (0, 0))
@@ -100,6 +137,8 @@ class App:
         self.add_date_button.is_hover(pygame.mouse.get_pos())
         self.sub_date_button.draw(screen)
         self.sub_date_button.is_hover(pygame.mouse.get_pos())
+        self.submit_button.draw(screen)
+        self.submit_button.is_hover(pygame.mouse.get_pos())
 
         # Draws 'New' text
         screen.blit(self.txt2, self.txt2.get_rect(center=c.cscale(790, 50)))
@@ -125,7 +164,17 @@ class App:
 
                     elif self.new_game_button.is_clicked(event.pos):
                         # Adds blank new game
-                        self.GAMES.append(Game.GameData(self.raw_player_json))
+                        self.GAMES.append(Game.GameData())
+
+                    elif self.submit_button.is_clicked(event.pos):
+                        # Starts Loading
+                        self.loading = True
+                        self.rendered_message = c.get_code_font(c.cscale(50)).render("Constructing JSON...", False,
+                                                                                     c.Colors.BLACK.value)
+                        self.thread_target = Globe.SERV.submitData
+                        self.load_thread.start()
+                        # Sets State
+                        self.state = App.State.RELOAD
 
         # Runs each game's menu GUI
         for idx in range(len(self.GAMES)):
@@ -171,30 +220,48 @@ class App:
             screen.blit(error_text, error_text.get_rect(center=c.cscale(450, 550)))
 
             # Draws button
-            self.retry_button.draw(screen)
-            self.retry_button.is_hover(pygame.mouse.get_pos())
+            if self.is_json_error:
+                self.back_button.draw(screen)
+                self.back_button.is_hover(pygame.mouse.get_pos())
+            else:
+                self.retry_button.draw(screen)
+                self.retry_button.is_hover(pygame.mouse.get_pos())
 
             # Button Event
             for event in Globe.events:
                 if event.type == pygame.MOUSEBUTTONUP:
                     # Left Mouse button
                     if event.button == 1:
-                        # If retry button is pressed
-                        if self.retry_button.is_clicked(event.pos):
-                            # Removes error and restarts
-                            self.error = None
-                            self.reset_thread()
-                            self.load_thread.start()
+                        if self.is_json_error:
+                            # If back button was pressed
+                            if self.retry_button.is_clicked(event.pos):
+                                # Removes error and returns to main menu
+                                self.error = None
+                                self.is_json_error = False
+                                self.loading = False
+                                self.reset_thread()
+                                self.state = App.State.MAIN
+                        else:
+                            # If retry button is pressed
+                            if self.retry_button.is_clicked(event.pos):
+                                # Removes error and restarts
+                                self.error = None
+                                self.reset_thread()
+                                self.load_thread.start()
 
     def __load(self):
         try:
             self.thread_target()
         except requests.exceptions.ConnectionError:
-            self.error = "Failed to load: Server offline"
+            self.error = "Error: Server offline"
+        except db.DataMissing:
+            self.error = "Build Failed: Missing Data!"
+            self.is_json_error = True
         except Exception as e:
-            self.error = "Failed to load: Something went wrong"
+            self.error = "Error: Something went wrong"
 
         # Loading will not end if an error is found. It is the job of the loading screen GUI
         # to handle retrying on the loading screen.
         if self.error is None:
             self.loading = False
+            self.reset_thread()

@@ -32,9 +32,8 @@ const getClientMapData = async () => {
     let new_rows = [];
     data.forEach((item) => {
         new_rows.push({
-            player_id: item.player_id,
-            player_name: item.name,
-            is_main_roster: item.ismainroster
+            map_id: item.map_id,
+            map_name: item.map_name
         });
     }); 
     

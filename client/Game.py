@@ -10,6 +10,7 @@ import copy
 # Data storage class for each game played
 class GameData:
     def __init__(self, player_json):
+        # TODO: Add Map Name and score display on game tab in main menu
         # GUI
         self.edit_button = Button.Button(list(c.cscale(570, 0)), c.cscale(128, 33), c.edit_button_image)
         self.delete_button = Button.Button(list(c.cscale(720, 0)), c.cscale(128, 33), c.delete_button_image)
@@ -19,16 +20,31 @@ class GameData:
         self.left_button = Button.Button(c.cscale(15, 440), c.cscale(45, 45), c.arrow_button_image)
         self.right_button = Button.Button(c.cscale(840, 440), c.cscale(45, 45),
                                           pygame.transform.flip(c.arrow_button_image, True, False))
+        self.map_left_button = Button.Button(c.cscale(330, 25), c.cscale(20, 20), c.arrow_button_image)
+        self.map_right_button = Button.Button(c.cscale(360, 25), c.cscale(20, 20),
+                                              pygame.transform.flip(c.arrow_button_image, True, False))
 
         # Flag to remove game from list
         self.kill = False
         # Flag to determine if edit was pressed
         self.edit = False
 
+        # Map information
+        self.map_idx = 0
+        self.map_id = Globe.APP.raw_map_json[self.map_idx % len(Globe.APP.raw_map_json)]["map_id"]
+        self.map_name = Globe.APP.raw_map_json[self.map_idx % len(Globe.APP.raw_map_json)]["map_name"]
+        self.map_name_surf = c.get_rockwell_font(c.cscale(35)).render(self.map_name, True, c.Colors.GRAY.value)
+
         # Display text
-        self.txt1 = c.get_rockwell_font(c.cscale(25)).render("Team Rounds:", False, (0, 0, 0))
-        self.txt2 = c.get_rockwell_font(c.cscale(25)).render("Enemy Rounds:", False, (0, 0, 0))
-        self.txt3 = c.get_rockwell_font(c.cscale(25)).render("Reason:", False, (0, 0, 0))
+        self.txt1 = c.get_rockwell_font(c.cscale(25)).render("Team Rounds:", False, c.Colors.BLACK.value)
+        self.txt2 = c.get_rockwell_font(c.cscale(25)).render("Enemy Rounds:", False, c.Colors.BLACK.value)
+        self.txt3 = c.get_rockwell_font(c.cscale(25)).render("Reason:", False, c.Colors.BLACK.value)
+        self.txt4 = c.get_rockwell_font(c.cscale(25)).render("Commendation:", False, c.Colors.BLACK.value)
+        self.txt5 = c.get_rockwell_font(c.cscale(25)).render("Criticism:", False, c.Colors.BLACK.value)
+        self.txt6 = c.get_rockwell_font(c.cscale(25)).render("Is Excused?:", False, c.Colors.BLACK.value)
+        self.txt7 = c.get_rockwell_font(c.cscale(25)).render("Has Notified?:", False, c.Colors.BLACK.value)
+        self.txt8 = c.get_rockwell_font(c.cscale(35)).render("Score: ", False, c.Colors.BLACK.value)
+        self.txt9 = c.get_rockwell_font(c.cscale(35)).render("Map: ", False, c.Colors.BLACK.value)
 
         # Form fields for data entry
         self.typefields = [Typefield.Field(c.cscale(570, 20), c.cscale(60), c.get_rockwell_font(c.cscale(20)),
@@ -39,6 +55,10 @@ class GameData:
                                            c.typefield_image, allowed_symbols=("0", "1", "2", "3", "4", "5", "6",
                                                                                "7", "8", "9"),
                                            field_id="enemy_rounds")]
+
+        # Variables which are updated once 'BACK' is pressed. Used for score display in menu
+        self.enemy_rounds_val = ""
+        self.team_rounds_val = ""
 
         # PlayerData objects for each player
         self.player_data = [PlayerGameData(player["player_id"]) for player in Globe.APP.raw_player_json]
@@ -52,14 +72,20 @@ class GameData:
         # Combined field array
         self.combined_fields = self.typefields + self.current_player_data.typefields + self.daily_player_data.typefields
 
-        # TODO Add Map Selection
-
     def run_game_edit(self, screen):
         # Draws text
         screen.blit(self.txt1, self.txt1.get_rect(center=c.cscale(500, 35)))
         screen.blit(self.txt2, self.txt2.get_rect(center=c.cscale(720, 35)))
         screen.blit(self.txt3, self.txt3.get_rect(center=c.cscale(495, 670)))
         screen.blit(self.txt3, self.txt3.get_rect(center=c.cscale(495, 740)))
+        screen.blit(self.txt4, self.txt4.get_rect(center=c.cscale(180, 670)))
+        screen.blit(self.txt5, self.txt5.get_rect(center=c.cscale(230, 740)))
+        screen.blit(self.txt6, self.txt6.get_rect(center=c.cscale(230, 810)))
+        if self.daily_player_data.notif_selector is not None:
+            screen.blit(self.txt7, self.txt7.get_rect(center=c.cscale(580, 810)))
+
+        # Blits map name
+        screen.blit(self.map_name_surf, self.map_name_surf.get_rect(center=c.cscale(240, 35)))
 
         # Draws player name
         player_name = c.getPlayerFromJson(self.current_player_data.player_id, Globe.APP.raw_player_json)["player_name"]
@@ -78,13 +104,22 @@ class GameData:
         self.back_button.draw(screen)
         self.left_button.draw(screen)
         self.right_button.draw(screen)
+        self.map_left_button.draw(screen)
+        self.map_right_button.draw(screen)
 
         self.back_button.is_hover(pygame.mouse.get_pos())
         self.left_button.is_hover(pygame.mouse.get_pos())
         self.right_button.is_hover(pygame.mouse.get_pos())
+        self.map_left_button.is_hover(pygame.mouse.get_pos())
+        self.map_right_button.is_hover(pygame.mouse.get_pos())
 
         # Runs ChoiceSelectors
         self.current_player_data.isabsent.draw_handler(screen)
+        self.daily_player_data.commend_selector.draw_handler(screen)
+        self.daily_player_data.criticism_selector.draw_handler(screen)
+        self.daily_player_data.excuse_selector.draw_handler(screen)
+        if self.daily_player_data.notif_selector is not None:
+            self.daily_player_data.notif_selector.draw_handler(screen)
 
         # Event handling
         for event in Globe.events:
@@ -92,6 +127,9 @@ class GameData:
                 if event.button == 1:
                     # Back Button
                     if self.back_button.is_clicked(event.pos):
+                        # Updates score variables
+                        self.enemy_rounds_val = [field.text for field in self.typefields if field.field_id == "enemy_rounds"][0]
+                        self.team_rounds_val = [field.text for field in self.typefields if field.field_id == "team_rounds"][0]
                         # Resets state
                         self.edit = False
                         Globe.APP.state = Globe.APP.State.MAIN
@@ -118,6 +156,27 @@ class GameData:
                                                   player.player_id == self.current_player_data.player_id][0]
                         self.combined_fields = self.typefields + self.current_player_data.typefields + self.daily_player_data.typefields
 
+                    # Map Cycle buttons
+                    elif self.map_left_button.is_clicked(event.pos):
+                        # Shifts index
+                        self.map_idx -= 1
+                        if self.map_idx < 0:
+                            self.map_idx = len(Globe.APP.raw_map_json) - 1
+                        # Resets values
+                        self.map_id = Globe.APP.raw_map_json[self.map_idx % len(Globe.APP.raw_map_json)]["map_id"]
+                        self.map_name = Globe.APP.raw_map_json[self.map_idx % len(Globe.APP.raw_map_json)]["map_name"]
+                        self.map_name_surf = c.get_rockwell_font(c.cscale(35)).render(self.map_name, True,
+                                                                                      c.Colors.GRAY.value)
+
+                    elif self.map_right_button.is_clicked(event.pos):
+                        # Shifts index
+                        self.map_idx += 1
+                        # Resets values
+                        self.map_id = Globe.APP.raw_map_json[self.map_idx % len(Globe.APP.raw_map_json)]["map_id"]
+                        self.map_name = Globe.APP.raw_map_json[self.map_idx % len(Globe.APP.raw_map_json)]["map_name"]
+                        self.map_name_surf = c.get_rockwell_font(c.cscale(35)).render(self.map_name, True,
+                                                                                      c.Colors.GRAY.value)
+
             if event.type == pygame.KEYUP:
                 # Tabs through fields
                 if event.key == pygame.K_TAB:
@@ -133,6 +192,11 @@ class GameData:
 
             # Runs ChoiceSelectors
             self.current_player_data.isabsent.event_handler(event)
+            self.daily_player_data.commend_selector.event_handler(event)
+            self.daily_player_data.criticism_selector.event_handler(event)
+            self.daily_player_data.excuse_selector.event_handler(event)
+            if self.daily_player_data.notif_selector is not None:
+                self.daily_player_data.notif_selector.event_handler(event)
 
             # Fields for main game info
             for field in self.combined_fields:
@@ -145,6 +209,26 @@ class GameData:
 
         # Draw tab background image
         screen.blit(c.tab_image, c.tab_image.get_rect(center=c.cscale(450, y_center)))
+
+        # Draws display text (score + Map)
+        screen.blit(self.txt8, self.txt8.get_rect(center=c.cscale(100, y_center)))
+        screen.blit(self.txt9, self.txt9.get_rect(center=c.cscale(350, y_center)))
+
+        # Displays score
+        if self.team_rounds_val == "" or self.enemy_rounds_val == "":
+            score_color = c.Colors.LIGHT_GRAY.value
+        elif int(self.team_rounds_val) < int(self.enemy_rounds_val):
+            score_color = c.Colors.RED.value
+        elif int(self.team_rounds_val) == int(self.enemy_rounds_val):
+            score_color = c.Colors.YELLOW.value
+        else:
+            score_color = c.Colors.GREEN.value
+        screen.blit(c.get_rockwell_font(c.cscale(30)).render(self.team_rounds_val + "-" + self.enemy_rounds_val,
+                                                             True, score_color),
+                    c.cscale(150, y_center - 15))
+        # Displays MAP
+        screen.blit(c.get_rockwell_font(c.cscale(30)).render(self.map_name, True, c.Colors.LIGHT_GRAY.value),
+                    c.cscale(410, y_center - 15))
 
         # Draws buttons
         self.edit_button.draw(screen)
@@ -229,10 +313,18 @@ class PlayerDailyData:
     def __init__(self, player_id):
         self.player_id = player_id
 
-        # TODO Add is_excused, has_notified, is_criticism, and is_commend
-
         # Form fields for data entry
         self.typefields = [Typefield.Field(c.cscale(550, 650), c.cscale(300), c.get_rockwell_font(c.cscale(20)),
                                            c.typefield_image, field_id="commend_reason"),
                            Typefield.Field(c.cscale(550, 720), c.cscale(300), c.get_rockwell_font(c.cscale(20)),
                                            c.typefield_image, field_id="criticism_reason")]
+
+        # Selectors for daily data
+        self.commend_selector = ChoiceSelector.Chooser(c.cscale(20, 20), c.yes_image, c.no_image, c.cscale(300, 670))
+        self.criticism_selector = ChoiceSelector.Chooser(c.cscale(20, 20), c.yes_image, c.no_image, c.cscale(300, 740))
+
+        self.excuse_selector = ChoiceSelector.Chooser(c.cscale(20, 20), c.yes_image, c.no_image, c.cscale(325, 810))
+        # Selector for notification before game start time, only for main roster
+        self.notif_selector = None
+        if c.getPlayerFromJson(self.player_id, Globe.APP.raw_player_json)["is_main_roster"]:
+            self.notif_selector = ChoiceSelector.Chooser(c.cscale(20, 20), c.yes_image, c.no_image, c.cscale(700, 810))

@@ -9,9 +9,13 @@ SCREEN_SIZE = (700, 700)
 class Colors(Enum):
     BLACK = (0, 0, 0)
     GRAY = (50, 50, 50)
+    LIGHT_GRAY = (100, 100, 100)
     LIGHT_BLUE = (173, 216, 230)
     MAROON = (120, 0, 0)
     DARK_GREEN = (0, 102, 0)
+    RED = (200, 0, 0)
+    GREEN = (0, 200, 0)
+    YELLOW = (155, 135, 12)
 
 
 def convert():

@@ -191,7 +191,7 @@ class App:
             self.thread_target()
         except requests.exceptions.ConnectionError:
             self.error = "Failed to load: Server offline"
-        except Exception:
+        except Exception as e:
             self.error = "Failed to load: Something went wrong"
 
         # Loading will not end if an error is found. It is the job of the loading screen GUI

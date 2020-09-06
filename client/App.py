@@ -261,8 +261,8 @@ class App:
             self.error = "Upload Failed: Cannot Connect to Database"
         except db.NoDatabaseException:
             self.error = "Error: Cannot Connect to Database"
-        #except Exception as e:
-         #   self.error = "Error: Something went wrong"
+        except Exception as e:
+            self.error = "Error: Something went wrong"
 
         # Loading will not end if an error is found. It is the job of the loading screen GUI
         # to handle retrying on the loading screen.

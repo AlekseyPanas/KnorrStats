@@ -97,6 +97,11 @@ def getPlayerFromJson(id, raw_data):
     return None
 
 
+# Gets typefield with specified ID from given list
+def getTypeField(id, typefields):
+    return [field for field in typefields if field.field_id == id][0]
+
+
 bg_image = pygame.transform.smoothscale(pygame.image.load("assets/images/bg.png"), cscale(900, 900))
 tab_image = pygame.transform.smoothscale(pygame.image.load("assets/images/game_tab.png"), cscale(832, 63))
 typefield_image = pygame.image.load("assets/images/typefield.png")

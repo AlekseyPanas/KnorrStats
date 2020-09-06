@@ -257,8 +257,12 @@ class App:
         except db.DataMissing:
             self.error = "Build Failed: Missing Data!"
             self.is_json_error = True
-        except Exception as e:
-            self.error = "Error: Something went wrong"
+        except db.UploadFailedException:
+            self.error = "Upload Failed: Cannot Connect to Database"
+        except db.NoDatabaseException:
+            self.error = "Error: Cannot Connect to Database"
+        #except Exception as e:
+         #   self.error = "Error: Something went wrong"
 
         # Loading will not end if an error is found. It is the job of the loading screen GUI
         # to handle retrying on the loading screen.

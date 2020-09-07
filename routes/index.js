@@ -30,6 +30,7 @@ router.get('/ajax/getmaps', async(req, res, next) => {
   }
 });
 
+/* Ajax call used by pygame client to upload game data */
 router.post('/ajax/upload_data', async(req, res, next) => {
   success = true;
 

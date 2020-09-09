@@ -44,7 +44,9 @@ class ServerComms:
             raise NoDatabaseException
 
         # Creates Daily Game Data objects for each player
-        Globe.APP.daily_player_data = [Game.PlayerDailyData(player["player_id"]) for player in Globe.APP.raw_player_json]
+        if not Globe.APP.has_set_daily_data:
+            Globe.APP.daily_player_data = [Game.PlayerDailyData(player["player_id"]) for player in Globe.APP.raw_player_json]
+        Globe.APP.has_set_daily_data = True
 
     def submitData(self):
         # Creates final JSON object

@@ -20,6 +20,9 @@ class App:
         RELOAD = 2
 
     def __init__(self):
+        # Flag so that the player retrieval function only resets daily data once
+        self.has_set_daily_data = False
+
         # State Machine bois
         self.state = App.State.MAIN
 

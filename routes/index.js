@@ -5,12 +5,6 @@ const { Pool } = require('pg');
 var router = express.Router();
 
 
-
-
-
-
-
-
 /* GET home page. */
 router.get('/', async (req, res, next) => {
     res.render('index', { title: 'Foo' });
@@ -18,10 +12,14 @@ router.get('/', async (req, res, next) => {
 
 
 
+router.get('/password', async (req, res, next) => {
+    res.render('password', {})
+});
 
 
 
 
+/* >>>>>>>>>>>>>> AJAX <<<<<<<<<<<<<<<<<< */
 
 /* Ajax call used by pygame client to retrieve player data */
 router.get('/ajax/getplayers', async (req, res, next) => {
@@ -33,14 +31,6 @@ router.get('/ajax/getplayers', async (req, res, next) => {
         res.json(player_info);
     }
 });
-
-
-
-
-
-
-
-
 
 
 /* Ajax call used by pygame client to retrieve map data */
@@ -55,26 +45,13 @@ router.get('/ajax/getmaps', async(req, res, next) => {
 });
 
 
-
-
-
-
-
-
+/* Use this ajax call to test stuff */
 router.get('/ajax/debug', (req, res, next) => {
     let date = new Date('4/14/2003');
     console.log(date.toDateString());
     
     res.send("reply");
 })
-
-
-
-
-
-
-
-
 
 
 /* Ajax call used by pygame client to upload game data */

@@ -6,3 +6,62 @@ body {
 a {
   color: #00B7FF;
 }
+
+/*
+ ____                                                            __                                                     
+/\  _`\                                                         /\ \                                                    
+\ \ \L\ \   __       ____    ____   __  __  __    ___    _ __   \_\ \               _____      __        __        __   
+ \ \ ,__/ /'__`\    /',__\  /',__\ /\ \/\ \/\ \  / __`\ /\`'__\ /'_` \             /\ '__`\  /'__`\    /'_ `\    /'__`\ 
+  \ \ \/ /\ \L\.\_ /\__, `\/\__, `\\ \ \_/ \_/ \/\ \L\ \\ \ \/ /\ \L\ \            \ \ \L\ \/\ \L\.\_ /\ \L\ \  /\  __/ 
+   \ \_\ \ \__/.\_\\/\____/\/\____/ \ \___x___/'\ \____/ \ \_\ \ \___,_\            \ \ ,__/\ \__/.\_\\ \____ \ \ \____\
+    \/_/  \/__/\/_/ \/___/  \/___/   \/__//__/   \/___/   \/_/  \/__,_ /             \ \ \/  \/__/\/_/ \/___L\ \ \/____/
+                                                                                      \ \_\              /\____/        
+                                                                                       \/_/              \_/__/                                                                                                                                                 
+*/
+
+
+#password-body {
+  background-image: url("/images/knorr_bg.png");
+  background-attachment: fixed;
+  background-position: center;
+  overflow: hidden;
+  position: relative;
+  padding: 30px;
+}
+
+#password-container {
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 2px;
+  background-color: gray;
+  display: inline-block;
+  padding: 1vw;
+  position: relative;
+  top: 30vh;
+}
+
+#password-title {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+}
+
+#password-input {
+  border-radius: 4px;
+  outline: none;
+}
+
+#password-submit-button {
+  outline: none;
+}
+
+#password-error {
+  position: relative;
+  top: 32vh;
+  color: maroon;
+  visibility: hidden;
+}
+
+.logo-container {
+  display: inline-block;
+  position: fixed;
+}

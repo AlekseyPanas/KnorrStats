@@ -7,11 +7,16 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
-    res.render('index', { title: 'Foo' });
+    // Redirects to password page if not logged in
+    if (!req.session.loggedin) {
+        res.redirect('/password')
+    } else {
+        res.render('index', { title: 'Foo' });
+    }
 });
 
 
-
+/* GET password page. */
 router.get('/password', async (req, res, next) => {
     res.render('password', {})
 });
@@ -20,6 +25,21 @@ router.get('/password', async (req, res, next) => {
 
 
 /* >>>>>>>>>>>>>> AJAX <<<<<<<<<<<<<<<<<< */
+
+/* Checks for password correctness and sets  */
+router.post('/ajax/password-check', async (req, res, next) => {
+    // Gets sent password from input
+    let password = req.body.password;
+
+    // Password compared directly to the desired correct password (probably not good practice, but hey, not that important)
+    if (password == "KNORR2020_$GG$") {
+        req.session.loggedin = true;
+        res.send(true);
+    } else {
+        res.send(false);
+    }
+});
+
 
 /* Ajax call used by pygame client to retrieve player data */
 router.get('/ajax/getplayers', async (req, res, next) => {

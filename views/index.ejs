@@ -3,20 +3,23 @@
   <% include partials/header %>
 
   <body id="override" class="index-body">
-
+    
     <% include partials/navbar %>
 
     <div class="container-fluid main-container">
 
       <div class="index-logo-head row">
         <div class="index-logo-container justify-content-center col-md-4 col-sm-6">
-          <img class="index-logo" src="/images/knorr_logo.png" alt="No Logo4u"> </img>
+          <img class="index-logo-placeholder index-logo" src="/images/knorr_logo.png" alt="No Logo4u"> </img>
         </div>
 
         <div class="col-md-8 col-sm-6"></div>
       </div>
 
     </div>
+
+    <!-- Logo which moved when scrolling. Controlled by javascript -->
+    <img class="index-logo-fixed index-logo" src="/images/knorr_logo.png" alt="No Logo4u"> </img>
 
   </body>
 

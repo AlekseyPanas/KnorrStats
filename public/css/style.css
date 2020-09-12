@@ -99,7 +99,17 @@ body {
   padding: 0;
   margin: 0;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
+}
+
+.navbar-logo-container {
+  margin: 0;
+  padding: 0;
+  background-image: url("/images/faded_bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 0px;
+  border-bottom: rgb(68, 68, 68) solid 2px;
 }
 
 a:hover,a:visited { 
@@ -141,14 +151,21 @@ a {
   background-size: 100% 100%;
   background-position: center top;
   padding: 100px 3vw 20vw 3vw;
+  z-index: 1;
 }
 
 .logo-bg-faded {
   width: 100%;
 }
 
-.index-logo {
+.index-logo-placeholder {
   min-width: 150px;
+  visibility: hidden;
   width: 90%;
-  z-index: -1;
+}
+
+.index-logo-fixed {
+  position: fixed;
+  visibility: hidden;
+  z-index: 2;
 }

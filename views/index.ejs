@@ -2,12 +2,24 @@
 <html lang="en">
   <% include partials/header %>
 
-  <body>
+  <body id="override" class="index-body">
 
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <% include partials/navbar %>
+
+    <div class="container-fluid main-container">
+
+      <div class="index-logo-head row">
+        <div class="index-logo-container justify-content-center col-md-4 col-sm-6">
+          <img class="index-logo" src="/images/knorr_logo.png" alt="No Logo4u"> </img>
+        </div>
+
+        <div class="col-md-8 col-sm-6"></div>
+      </div>
+
+    </div>
 
   </body>
-  
+
   <% include partials/scripts %>
+  <script src="/js/index.js"> </script>
 </html>

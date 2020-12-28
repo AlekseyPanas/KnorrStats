@@ -21,7 +21,41 @@ where
 order by g.date desc
 ------------------------------------------------------------------------
 	
+# 1stat page create procedure
+	
+CREATE OR REPLACE FUNCTION public.fetch_game_stats
+	(IN stat_name text, 
+	 IN min_date date DEFAULT NULL, 
+	 IN max_date date DEFAULT NULL, 
+	 IN is_cumulative boolean DEFAULT FALSE, 
+	 IN is_exclude_absences boolean DEFAULT FALSE, 
+	 IN player_ids integer[] DEFAULT NULL, 
+	 IN map_ids integer[] DEFAULT NULL)
+RETURNS jsonb
+STABLE
+LANGUAGE 'plpgsql'
 
+AS $BODY$
+begin
+
+
+
+return '{"Hi": 123}'::jsonb;
+
+end
+$BODY$;
+
+
+# 1stat query progress
+
+select
+	g.game_id,
+	gs.player_id,
+	gs.kills
+from game g
+	cross join player p
+	left join game_stats gs on gs.game_id = g.game_id and p.player_id = gs.player_id
+order by 
 
 
 

@@ -11,6 +11,6 @@ The project consists of 3 parts:
 
 ### Development Progress
 The project is still unfinished and is being worked on. Approximate progress shown below:
-- > Client 50% 
+- > Client 100% 
 - > Database 100%
-- > Webserver 5%
+- > Webserver 15%

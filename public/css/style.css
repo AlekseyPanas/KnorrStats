@@ -1,10 +1,21 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-a {
-  color: #00B7FF;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }
 
 /*
@@ -65,3 +76,215 @@ a {
   display: inline-block;
   position: fixed;
 }
+
+/*
+                                                  ____                                
+ /'\_/`\               __                        /\  _`\                              
+/\      \      __     /\_\     ___               \ \ \L\ \   __        __        __   
+\ \ \__\ \   /'__`\   \/\ \  /' _ `\              \ \ ,__/ /'__`\    /'_ `\    /'__`\ 
+ \ \ \_/\ \ /\ \L\.\_  \ \ \ /\ \/\ \              \ \ \/ /\ \L\.\_ /\ \L\ \  /\  __/ 
+  \ \_\\ \_\\ \__/.\_\  \ \_\\ \_\ \_\              \ \_\ \ \__/.\_\\ \____ \ \ \____\
+   \/_/ \/_/ \/__/\/_/   \/_/ \/_/\/_/               \/_/  \/__/\/_/ \/___L\ \ \/____/
+                                                                       /\____/        
+*/
+
+body {
+  padding: 0;
+  width: 100vw;
+  margin: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.index-body {
+  background-color: lightgray;
+}
+
+.nav-item {
+  border-right: 2px solid black;
+  border-bottom: 1px solid black;
+  border-radius: 0 0 5px 0;
+  padding: 5px 3px 3px 3px;
+  color: black;
+  margin: 0px .5vw 0px .5vw;
+  background-image: linear-gradient(to bottom, gray , white);
+}
+
+.index-navbar {
+  background-color: white;
+}
+
+.navbar-container {
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  z-index: 3;
+}
+
+.navbar-logo-container {
+  margin: 0;
+  padding: 0;
+  background-image: url("/images/faded_bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 0px;
+  border-bottom: rgb(68, 68, 68) solid 2px;
+}
+
+a:hover,a:visited { 
+  color:#000; 
+  text-decoration: none;
+}
+
+a {
+  font-family: Arial, Helvetica, sans-serif;
+  color:#000; 
+}
+
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background: black;
+  margin: 0;
+  padding: 0;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #4caf50;
+  width: 0%;
+  margin: 0;
+  padding: 0;
+}
+
+/*MAIN PAGE STUFF*/
+
+.main-container {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+}
+
+.index-logo-head {
+  background-image: url("/images/faded_bg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center top;
+  padding: 100px 3vw 20vw 3vw;
+  z-index: 1;
+}
+
+.logo-bg-faded {
+  width: 100%;
+}
+
+.index-logo-placeholder {
+  min-width: 150px;
+  visibility: hidden;
+  width: 90%;
+}
+
+.index-logo-fixed {
+  position: fixed;
+  visibility: hidden;
+  z-index: 2;
+}
+
+/* Members Box */
+
+.members-outer-container {
+  padding: 0;
+  margin: 0;
+}
+
+.members-inner-container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  flex: 0 900px;
+  background-color: white;
+  padding: 5px 20px 5px 20px;
+  border-top: 4px solid rgb(151, 151, 151);
+  border-left: 4px solid rgb(151, 151, 151);
+  height: 600px;
+  overflow-y: scroll;
+}
+
+.member-box {
+  display: inline-block;
+  background-color: lightgray;
+  border-top: 2px solid rgb(151, 151, 151);
+  border-left: 2px solid rgb(151, 151, 151);
+  position: relative;
+}
+
+@media (min-width: 440px) {
+  .member-box {
+    width: 400px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 439px) {
+  .member-box {
+    width: 100vw;
+    height: 22.5vw;
+  }
+}
+
+.member-profile {
+  height: 77.7%;
+  width: 17.5%;
+  border: 2px solid black;
+  border-radius: 500px;
+  top: 11.1%;
+}
+
+.member-name {
+  top: 11.1%;
+  left: 25%;
+}
+
+.main-roster-tag {
+  display: inline-block;
+  background-color: orange;
+  border-radius: 10px;
+  border: 2px solid black;
+  height: 22.2%;
+  top: 11.1%;
+  left: 50%;
+}
+
+.main-roster {
+  font-size: x-small;
+  margin: 0 5px 0 5px;
+}
+
+.awards-text {
+  top: 11.1%;
+  left: 82.5%;
+}
+
+.members-award-box {
+  display: inline-block;
+  background-color: rgb(241, 241, 241);
+  height: 55.5%;
+  width: 75%;
+  top: 42.3%;
+  left: 24.6%;
+}
+
+.mem-mem {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+}
+
+.members-title {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+/*@media (max-width: 800px) {
+  /* CSS that should be displayed if width is equal to or less than 800px goes here */
+/*}*/

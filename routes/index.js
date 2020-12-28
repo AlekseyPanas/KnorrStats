@@ -7,11 +7,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', async (req, res, next) => {
-    // Redirects to password page if not logged in
-    if (!req.session.loggedin) {
+    // Redirects to password page if not logged in (Add NOT, removed for debugging)
+    if (req.session.loggedin) {
         res.redirect('/password')
     } else {
-        res.render('index', { title: 'Foo' });
+        res.render('index', {});
     }
 });
 

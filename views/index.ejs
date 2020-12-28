@@ -2,12 +2,50 @@
 <html lang="en">
   <% include partials/header %>
 
-  <body>
+  <body id="override" class="index-body">
+    
+    <% include partials/navbar %>
 
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <!-- Logo which moves when scrolling. Controlled by javascript -->
+    <img class="index-logo-fixed index-logo" src="/images/knorr_logo.png" alt="No Logo4u"> </img>
+
+    <div class="container-fluid main-container">
+
+      <div class="index-logo-head row">
+        <div class="index-logo-container justify-content-center col-md-4 col-sm-6">
+          <img class="index-logo-placeholder index-logo" src="/images/knorr_logo.png" alt="No Logo4u"> </img>
+        </div>
+
+        <div class="col-md-8 col-sm-6"></div>
+      </div>
+
+      <div class="container-fluid row members-outer-container justify-content-center">
+        <div class="members-inner-container">
+          <div class="members-title">
+            <h2 class="" style="display: inline-block;">Members</h2>
+          </div>
+          
+          <div class="member-box container">
+            <img class="member-profile mem-mem" src="/images/knorr_logo.png" alt="No"> </img>
+            <div class="member-name mem-mem">
+              <h5 class="" style="padding:0;margin:0;">Alex</h5>
+            </div>
+            <div class="main-roster-tag mem-mem">
+              <p class="main-roster">main roster</p>
+            </div>
+            <div class="mem-mem awards-text">
+              <h6 class="" style="padding:0; margin:0;">Awards:</h6>
+            </div>
+            <div class="members-award-box mem-mem"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>    
 
   </body>
-  
+
   <% include partials/scripts %>
+  <script src="/js/index.js"> </script>
 </html>
